@@ -1,0 +1,16 @@
+package com.dan.service;
+
+import com.dan.model.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.sql.Date;
+
+public interface UserService extends UserDetailsService {
+    public User getUserByUsername(String username);
+    public User createUser(User user);
+    public boolean existsByUsername(String username);
+    public boolean existsByEmail(String email);
+    public User updateUser(User user, Long id);
+    public User updateUser(String name, Date dob, String phoneNumber, String cccd, MultipartFile file, Long id);
+}

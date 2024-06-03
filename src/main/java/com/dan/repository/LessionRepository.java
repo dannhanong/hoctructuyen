@@ -1,0 +1,14 @@
+package com.dan.repository;
+
+import com.dan.model.Lession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface LessionRepository extends JpaRepository<Lession, Long>{
+    @Query("SELECT l FROM Lession l WHERE CONCAT(l.name, ' ', l.description) LIKE %:keyword%")
+    Page<Lession> searchByKeyword(String keyword, Pageable pageable);
+}

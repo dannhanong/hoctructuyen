@@ -3,6 +3,7 @@ package com.dan.controller;
 import com.dan.model.Category;
 import com.dan.model.Course;
 import com.dan.model.FileUpload;
+import com.dan.model.dto.ResponseMessage;
 import com.dan.service.CategoryService;
 import com.dan.service.CourseService;
 import com.dan.service.FileUploadService;
@@ -47,24 +48,10 @@ public class CourseController {
                                                @RequestParam(value = "courseImage", required = false) MultipartFile courseImage,
                                                @RequestParam(value = "courseVideo", required = false) MultipartFile courseVideo,
                                                @RequestParam(value = "result") String result,
-                                               @RequestParam(value = "object") String object) throws IOException {
-        Course course = new Course();
-        course.setName(name);
-        course.setDescription(description);
-        course.setCost(cost);
-        course.setResult(result);
-        course.setObject(object);
-        if (courseImage != null && !courseImage.isEmpty()) {
-            String filecourseImageName = StringUtils.cleanPath(courseImage.getOriginalFilename());
-            FileUpload fileUploadCourseImage = fileUploadService.uploadFile(filecourseImageName, courseImage);
-            course.setCourseImage(fileUploadCourseImage);
-        }
-        if (courseVideo != null && !courseVideo.isEmpty()) {
-            String filecourseVideoName = StringUtils.cleanPath(courseVideo.getOriginalFilename());
-            FileUpload fileUploadCourseVideo = fileUploadService.uploadFile(filecourseVideoName, courseVideo);
-            course.setCourseVideo(fileUploadCourseVideo);
-        }
-        return new ResponseEntity<>(courseService.createCourse(course), HttpStatus.CREATED);
+                                               @RequestParam(value = "object") String object,
+                                               @RequestParam(value = "category") Category category) throws IOException {
+
+        return new ResponseEntity<>(courseService.createCourse(name, description, cost, courseImage, courseVideo, result, object, category), HttpStatus.CREATED);
     }
 
     @PutMapping("/admin/update/{id}")
@@ -75,49 +62,15 @@ public class CourseController {
                                                @RequestParam(value = "courseVideo", required = false) MultipartFile courseVideo,
                                                @RequestParam(value = "result") String result,
                                                @RequestParam(value = "object") String object,
+                                               @RequestParam(value = "category") Category category,
                                                @PathVariable("id") Long id) throws IOException {
-        Course course = courseService.getCourseById(id);
-        course.setName(name);
-        course.setDescription(description);
-        course.setCost(cost);
-        course.setResult(result);
-        course.setObject(object);
-        Long oldCourseImageId = null;
-        Long oldCourseVideoId = null;
-        if (courseImage != null && !courseImage.isEmpty()) {
-            if (course.getCourseImage() != null && !course.getCourseImage().equals("")){
-                oldCourseImageId = course.getCourseImage().getId();
-            }
-            String filecourseImageName = StringUtils.cleanPath(courseImage.getOriginalFilename());
-            FileUpload fileUploadCourseImage = fileUploadService.uploadFile(filecourseImageName, courseImage);
-            course.setCourseImage(fileUploadCourseImage);
-        }
-        if (courseVideo != null && !courseVideo.isEmpty()) {
-            if (course.getCourseVideo() != null && !course.getCourseVideo().equals("")){
-                oldCourseVideoId = course.getCourseVideo().getId();
-            }
-            String filecourseVideoName = StringUtils.cleanPath(courseVideo.getOriginalFilename());
-            FileUpload fileUploadCourseVideo = fileUploadService.uploadFile(filecourseVideoName, courseVideo);
-            course.setCourseVideo(fileUploadCourseVideo);
-        }
-        Course updatedCourse = courseService.updateCourse(id, course);
-        if (oldCourseImageId != null){
-            fileUploadService.deleteFile(oldCourseImageId);
-        }
-        return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
+        return new ResponseEntity<>(courseService.updateCourse(name, description, cost, courseImage, courseVideo, result, object, category, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/delete/{id}")
-    public ResponseEntity<?> deleteCourse(@PathVariable("id") Long id) throws IOException {
-        Course course = courseService.getCourseById(id);
-        if (course.getCourseImage() != null){
-            fileUploadService.deleteFile(course.getCourseImage().getId());
-        }
-        if (course.getCourseVideo() != null){
-            fileUploadService.deleteFile(course.getCourseVideo().getId());
-        }
+    public ResponseEntity<ResponseMessage> deleteCourse(@PathVariable("id") Long id) throws IOException {
         courseService.deleteCourse(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("deleted"), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

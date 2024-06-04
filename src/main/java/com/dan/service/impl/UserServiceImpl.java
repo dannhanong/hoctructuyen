@@ -1,26 +1,41 @@
 package com.dan.service.impl;
 
+import com.dan.model.FileUpload;
 import com.dan.model.Role;
 import com.dan.model.User;
+import com.dan.model.dto.ChangePasswordForm;
+import com.dan.model.dto.ResponseMessage;
 import com.dan.repository.RoleRepository;
 import com.dan.repository.UserRepository;
+import com.dan.service.FileUploadService;
 import com.dan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private FileUploadService fileUploadService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
@@ -61,8 +76,53 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(String name, Date dob, String phoneNumber, String cccd, MultipartFile file, Long id) {
-        return null;
+    public User updateUser(String name, Date dob, String phoneNumber,
+                           String cccd, MultipartFile avatar, String username) {
+        User currentUser = userRepository.findByUsername(username);
+        currentUser.setName(name);
+        currentUser.setDob(dob);
+        currentUser.setPhoneNumber(phoneNumber);
+        currentUser.setCccd(cccd);
+        Long oldAvatarId = null;
+        if (avatar != null && !avatar.isEmpty()) {
+            String avatarName = StringUtils.cleanPath(avatar.getOriginalFilename());
+            if (currentUser.getAvatar() != null && !currentUser.getAvatar().equals("")) {
+                oldAvatarId = currentUser.getAvatar().getId();
+            }
+            try {
+                FileUpload fileUploadAvatar = fileUploadService.uploadFile(avatarName, avatar);
+                currentUser.setAvatar(fileUploadAvatar);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        User updateCurrentUser = userRepository.save(currentUser);
+        if (oldAvatarId != null) {
+            try {
+                fileUploadService.deleteFile(oldAvatarId);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return updateCurrentUser;
+    }
+
+    @Override
+    public ResponseMessage changePassword(String username, ChangePasswordForm changePasswordForm) {
+        User currentUser = userRepository.findByUsername(username);
+        ResponseMessage responseMessage = new ResponseMessage();
+        if(passwordEncoder.matches(changePasswordForm.getOldPassword(), currentUser.getPassword())){
+            if(!changePasswordForm.getNewPassword().equals(changePasswordForm.getConfirmPassword())){
+                responseMessage.setMessage("password_not_match");
+            }
+            currentUser.setPassword(passwordEncoder.encode(changePasswordForm.getNewPassword()));
+            userRepository.save(currentUser);
+            responseMessage.setMessage("change_password_success");
+        }
+        else {
+            responseMessage.setMessage("change_password_fail");
+        }
+        return responseMessage;
     }
 
     @Override

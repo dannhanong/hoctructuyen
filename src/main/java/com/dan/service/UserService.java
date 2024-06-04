@@ -1,6 +1,8 @@
 package com.dan.service;
 
 import com.dan.model.User;
+import com.dan.model.dto.ChangePasswordForm;
+import com.dan.model.dto.ResponseMessage;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,5 +14,7 @@ public interface UserService extends UserDetailsService {
     public boolean existsByUsername(String username);
     public boolean existsByEmail(String email);
     public User updateUser(User user, Long id);
-    public User updateUser(String name, Date dob, String phoneNumber, String cccd, MultipartFile file, Long id);
+    public User updateUser(String name, Date dob, String phoneNumber, String cccd,
+                           MultipartFile file, String username);
+    public ResponseMessage changePassword(String username, ChangePasswordForm changePasswordForm);
 }

@@ -12,4 +12,12 @@ public class Endpoints {
             "/signup",
             "/comments/**",
     };
+
+    public static final String[] PUBLIC_PUT_ENDPOINTSS = {
+            "/profile/**",
+            "/comments/**",
+    };
+
+    public static final String[] PUBLIC_DELETE_ENDPOINTSS = {
+    };
 }

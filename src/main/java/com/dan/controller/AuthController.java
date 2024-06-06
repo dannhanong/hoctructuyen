@@ -43,12 +43,12 @@ public class AuthController {
     private JwtService jwtService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> register(@Valid @RequestBody SignupForm signupForm, HttpServletRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody SignupForm signupForm) {
         if(userService.existsByUsername(signupForm.getUsername())){
-            return new ResponseEntity<>(new ResponseMessage("username_exists"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("username_exists"), HttpStatus.BAD_REQUEST);
         }
         if(userService.existsByEmail(signupForm.getEmail())){
-            return new ResponseEntity<>(new ResponseMessage("email_exists"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("email_exists"), HttpStatus.BAD_REQUEST);
         }
 
         User user = new User(signupForm.getName(), signupForm.getUsername(), passwordEncoder.encode(signupForm.getPassword()), signupForm.getEmail());

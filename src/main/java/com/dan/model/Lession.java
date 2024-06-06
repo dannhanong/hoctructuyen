@@ -24,4 +24,7 @@ public class Lession {
     @OneToOne
     @JoinColumn(name = "lession_document_id")
     private FileUpload lessionDocument;
+    @OneToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
 }

@@ -82,7 +82,6 @@ public class UserServiceImpl implements UserService {
         currentUser.setName(name);
         currentUser.setDob(dob);
         currentUser.setPhoneNumber(phoneNumber);
-        currentUser.setCccd(cccd);
         Long oldAvatarId = null;
         if (avatar != null && !avatar.isEmpty()) {
             String avatarName = StringUtils.cleanPath(avatar.getOriginalFilename());

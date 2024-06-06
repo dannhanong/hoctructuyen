@@ -52,6 +52,7 @@ public class Course_UserServiceImpl implements Course_UserService {
         Course_User course_user = new Course_User();
         course_user.setCourse(course);
         course_user.setUser(user);
+        course_user.setCreatedDate(new Timestamp(System.currentTimeMillis()));
         long amount = course_user.getCourse().getCost();
 
         String partnerClientId = "partnerClientId";
@@ -60,6 +61,7 @@ public class Course_UserServiceImpl implements Course_UserService {
         String notifyURL = "https://google.com.vn";
         Environment environment = Environment.selectEnv("dev");
         PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.CAPTURE_WALLET, Boolean.TRUE);
+        Course_User newCourse_User = course_userRepository.save(course_user);
         return captureWalletMoMoResponse;
     }
 

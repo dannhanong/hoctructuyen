@@ -46,8 +46,6 @@ public class User {
     private Date dob;
     @Pattern(regexp = "(\\d{4}[-.]?\\d{3}[-.]?\\d{3})", message = "Số điện thoại phải bao gồm 10 chữ số và có thể có dấu chấm hoặc dấu gạch ngang giữa các phần tử")
     private String phoneNumber;
-    @Pattern(regexp = "\\d{12}", message = "CCCD phải bao gồm 12 chữ số")
-    private String cccd;
 
     public User(String name, String username, String encode, String email) {
         this.name = name;

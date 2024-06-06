@@ -1,6 +1,9 @@
 package com.dan.security;
 
+import com.dan.security.jwt.JwtFilter;
 import com.dan.service.UserService;
+import jakarta.websocket.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,14 +12,18 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
 
 @Configuration
 public class SecurityConfiguration {
+//    @Autowired
+//    private JwtFilter jwtFilter;
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -36,6 +43,7 @@ public class SecurityConfiguration {
                 config->config
                         .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINTSS).permitAll()
+                        .requestMatchers(HttpMethod.PUT, Endpoints.PUBLIC_PUT_ENDPOINTSS).permitAll()
                         .anyRequest().permitAll()
         );
         http.cors(cors -> {
@@ -47,6 +55,9 @@ public class SecurityConfiguration {
                 return corsConfig;
             });
         });
+//        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         http.httpBasic(Customizer.withDefaults());
         http.csrf(csrf->csrf.disable());
         return http.build();

@@ -1,5 +1,6 @@
 package com.dan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,13 +21,16 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @Lob
     private String content;
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonIgnore
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "lession_id")
+    @JsonIgnore
     private Lession lession;
 
     @ManyToOne(optional = true)

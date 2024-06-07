@@ -3,6 +3,7 @@ package com.dan.controller;
 import com.dan.model.Category;
 import com.dan.model.Course;
 import com.dan.model.FileUpload;
+import com.dan.model.dto.CourseDetailAndSuggest;
 import com.dan.model.dto.ResponseMessage;
 import com.dan.service.CategoryService;
 import com.dan.service.CourseService;
@@ -73,9 +74,13 @@ public class CourseController {
         return new ResponseEntity<>(new ResponseMessage("deleted"), HttpStatus.OK);
     }
 
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Course> getCourseById(@PathVariable("id") Long id) {
+//        return new ResponseEntity<>(courseService.getCourseById(id), HttpStatus.OK);
+//    }
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(courseService.getCourseById(id), HttpStatus.OK);
+    public ResponseEntity<CourseDetailAndSuggest> showCourseDetail(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(courseService.getCourseDetailAndSuggest(id), HttpStatus.OK);
     }
 
     @GetMapping("/course/by-category/{id}")

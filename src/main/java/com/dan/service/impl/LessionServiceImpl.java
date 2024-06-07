@@ -1,14 +1,19 @@
 package com.dan.service.impl;
 
+import com.dan.model.Comment;
 import com.dan.model.Course;
 import com.dan.model.FileUpload;
 import com.dan.model.Lession;
+import com.dan.model.dto.LessionDetail;
 import com.dan.repository.LessionRepository;
+import com.dan.service.CommentService;
 import com.dan.service.FileUploadService;
 import com.dan.service.LessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +26,8 @@ public class LessionServiceImpl implements LessionService {
     private LessionRepository lessionRepository;
     @Autowired
     private FileUploadService fileUploadService;
+    @Autowired
+    private CommentService commentService;
 
     @Override
     public Page<Lession> getAllLessions(String keyword, Pageable pageable) {
@@ -85,6 +92,17 @@ public class LessionServiceImpl implements LessionService {
     @Override
     public Lession getLession(Long id) {
         return lessionRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found lession"));
+    }
+
+    @Override
+    public LessionDetail getLessionDetail(Long id) {
+        Lession lession = lessionRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found lession"));
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Order.desc("id")));
+        Page<Comment> comments = commentService.getCommentLession(lession, pageable);
+        LessionDetail lessionDetail = new LessionDetail();
+        lessionDetail.setLession(lession);
+        lessionDetail.setComments(comments);
+        return lessionDetail;
     }
 
     @Override

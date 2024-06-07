@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     Teacher findByUser(User user);
-    @Query("SELECT t FROM Teacher t WHERE CONCAT(t.name, ' ', t.discipline.name) LIKE %:keyword%")
+    @Query("SELECT t FROM Teacher t WHERE CONCAT(t.user.name, ' ', t.discipline.name) LIKE %:keyword%")
     Page<Teacher> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }

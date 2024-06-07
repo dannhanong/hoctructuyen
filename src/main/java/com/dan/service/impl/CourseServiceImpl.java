@@ -1,19 +1,25 @@
 package com.dan.service.impl;
 
 import com.dan.model.Category;
+import com.dan.model.Comment;
 import com.dan.model.Course;
 import com.dan.model.FileUpload;
+import com.dan.model.dto.CourseDetailAndSuggest;
 import com.dan.repository.CourseRepository;
+import com.dan.service.CommentService;
 import com.dan.service.CourseService;
 import com.dan.service.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -21,6 +27,8 @@ public class CourseServiceImpl implements CourseService {
     private CourseRepository courseRepository;
     @Autowired
     private FileUploadService fileUploadService;
+    @Autowired
+    private CommentService commentService;
 
     @Override
     public Page<Course> getAllCourses(String keyword, Pageable pageable) {
@@ -30,6 +38,20 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course getCourseById(Long id) {
         return courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
+    }
+
+    @Override
+    public CourseDetailAndSuggest getCourseDetailAndSuggest(Long id) {
+        Course course = courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
+        Pageable pageable = PageRequest.of(0, 4);
+        List<Course> suggestCourses = courseRepository.findByCategoryOrTeacherAndIdNot(course.getCategory(), course.getTeacher(), PageRequest.of(0, 5), id);
+        Pageable paginate = PageRequest.of(0, 5, Sort.by(Sort.Order.desc("id")));
+        Page<Comment> comments = commentService.getCommentByCourse(course, pageable);
+        CourseDetailAndSuggest courseDetailAndSuggest = new CourseDetailAndSuggest();
+        courseDetailAndSuggest.setCourse(course);
+        courseDetailAndSuggest.setSuggestions(suggestCourses);
+        courseDetailAndSuggest.setComments(comments);
+        return courseDetailAndSuggest;
     }
 
     @Override

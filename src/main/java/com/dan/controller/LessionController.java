@@ -2,6 +2,7 @@ package com.dan.controller;
 
 import com.dan.model.Course;
 import com.dan.model.Lession;
+import com.dan.model.dto.LessionDetail;
 import com.dan.model.dto.ResponseMessage;
 import com.dan.service.LessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +51,8 @@ public class LessionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Lession> getLession(@PathVariable(value = "id") Long id) {
-        return new ResponseEntity(lessionService.getLession(id), HttpStatus.OK);
+    public ResponseEntity<LessionDetail> getLessionDetail(@PathVariable(value = "id") Long id) {
+        return new ResponseEntity(lessionService.getLessionDetail(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/delete/{id}")

@@ -16,6 +16,7 @@ public class Teacher {
     private Long id;
     @Pattern(regexp = "\\d{12}", message = "CCCD phải bao gồm 12 chữ số")
     private String cccd;
+    private boolean sex;
     @OneToOne
     @JoinColumn(name = "discipline_id", referencedColumnName = "id")
     private Discipline discipline;

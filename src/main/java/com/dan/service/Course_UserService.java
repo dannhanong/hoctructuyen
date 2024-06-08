@@ -15,4 +15,5 @@ public interface Course_UserService {
     public PaymentResponse createCourse_User(Course course, String username) throws MoMoException, MoMoException;
     public Course_User updateCourse_User(Course_User course_user, Long id);
     public void deleteCourse_User(Long id);
+    public int totalCostOfCourse(Course course);
 }

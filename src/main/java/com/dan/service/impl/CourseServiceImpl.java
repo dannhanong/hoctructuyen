@@ -1,9 +1,6 @@
 package com.dan.service.impl;
 
-import com.dan.model.Category;
-import com.dan.model.Comment;
-import com.dan.model.Course;
-import com.dan.model.FileUpload;
+import com.dan.model.*;
 import com.dan.model.dto.CourseDetailAndSuggest;
 import com.dan.repository.CourseRepository;
 import com.dan.service.CommentService;
@@ -15,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +31,16 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Page<Course> getAllCourses(String keyword, Pageable pageable) {
         return courseRepository.searchByKeyword(keyword, pageable);
+    }
+
+    @Override
+    public List<Course> getAllCourses() {
+        return courseRepository.findAll();
+    }
+
+    @Override
+    public List<Course> getCourseByTeacher(Teacher teacher) {
+        return courseRepository.findByTeacher(teacher);
     }
 
     @Override
@@ -60,6 +68,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public Course createCourse(String name, String description, int cost, MultipartFile courseImage, MultipartFile courseVideo, String result, String object, Category category) throws IOException {
         Course course = new Course();
         course.setName(name);
@@ -82,6 +91,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public void deleteCourse(Long id) {
         Course course = courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
         if (course.getCourseImage() != null){
@@ -102,6 +112,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public Course updateCourse(Long id, Course course) {
         return courseRepository.findById(id)
                 .map(c -> {
@@ -119,6 +130,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public Course updateCourse(String name, String description, int cost, MultipartFile courseImage,
                                MultipartFile courseVideo, String result, String object, Category category,
                                Long id) throws IOException {

@@ -1,16 +1,23 @@
 package com.dan.service.impl;
 
+import com.dan.model.Course;
+import com.dan.model.Report;
 import com.dan.model.Teacher;
 import com.dan.model.User;
+import com.dan.model.dto.Course_Amount;
 import com.dan.model.dto.CreateTeacherForm;
 import com.dan.repository.TeacherRepository;
+import com.dan.service.CourseService;
+import com.dan.service.Course_UserService;
 import com.dan.service.TeacherService;
 import com.dan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,6 +26,10 @@ public class TeacherServiceImpl implements TeacherService {
     private TeacherRepository teacherRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private Course_UserService course_userService;
 
     @Override
     public Teacher createTeacher(Teacher teacher) {
@@ -26,6 +37,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    @Transactional
     public Teacher createTeacher(CreateTeacherForm createTeacherForm) {
         User user = new User();
         Teacher teacher = new Teacher();
@@ -54,6 +66,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    @Transactional
     public void deleteTeacher(Long id) {
         teacherRepository.deleteById(id);
     }
@@ -70,6 +83,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    @Transactional
     public Teacher updateTeacher(CreateTeacherForm createTeacherForm, Long id) {
         Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found teacher"));
         User user = teacher.getUser();
@@ -93,5 +107,22 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Page<Teacher> getAllTeacherByKeyword(String keyword, Pageable pageable) {
         return teacherRepository.searchByKeyword(keyword, pageable);
+    }
+
+    @Override
+    public Report getReport(Teacher teacher) {
+        Report report = new Report();
+        report.setTeacher(teacher);
+        List<Course> courses = courseService.getCourseByTeacher(teacher);
+        List<Course_Amount> courseAmounts = new ArrayList<>();
+        for (Course course : courses) {
+            int totalAmount = course_userService.totalCostOfCourse(course);
+            Course_Amount course_amount = new Course_Amount();
+            course_amount.setCourse(course);
+            course_amount.setTotalAmount(totalAmount);
+            courseAmounts.add(course_amount);
+        }
+        report.setCourse_amounts(courseAmounts);
+        return report;
     }
 }

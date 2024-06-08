@@ -17,4 +17,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Page<Course> searchByKeyword(String keyword, Pageable pageable);
     Page<Course> findByCategory(Category category, Pageable pageable);
     List<Course> findByCategoryOrTeacherAndIdNot(Category category, Teacher teacher, Pageable pageable, Long id);
+    @Query("SELECT SUM(c.cost) FROM Course c WHERE c.id = ?1")
+    int getTotalCost(Long id);
+    List<Course> findByTeacher(Teacher teacher);
 }

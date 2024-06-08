@@ -1,5 +1,6 @@
 package com.dan.service;
 
+import com.dan.model.Report;
 import com.dan.model.Teacher;
 import com.dan.model.User;
 import com.dan.model.dto.CreateTeacherForm;
@@ -18,4 +19,5 @@ public interface TeacherService {
     Teacher updateTeacher(CreateTeacherForm createTeacherForm, Long id);
     Teacher getTeacherByUser(User user);
     Page<Teacher> getAllTeacherByKeyword(String keyword, Pageable pageable);
+    Report getReport(Teacher teacher);
 }

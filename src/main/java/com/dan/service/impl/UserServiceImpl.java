@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,6 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User updateUser(String name, Date dob, String phoneNumber,
                            String cccd, MultipartFile avatar, String username) {
         User currentUser = userRepository.findByUsername(username);
@@ -107,6 +109,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public ResponseMessage changePassword(String username, ChangePasswordForm changePasswordForm) {
         User currentUser = userRepository.findByUsername(username);
         ResponseMessage responseMessage = new ResponseMessage();

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 
@@ -38,11 +39,13 @@ public class Course_UserServiceImpl implements Course_UserService {
     }
 
     @Override
+    @Transactional
     public Course_User createCourse_User(Course_User course_user) {
         return course_userRepository.save(course_user);
     }
 
     @Override
+    @Transactional
     public PaymentResponse createCourse_User(Course course, String username) throws MoMoException {
         User user = userService.getUserByUsername(username);
         LogUtils.init();
@@ -66,6 +69,7 @@ public class Course_UserServiceImpl implements Course_UserService {
     }
 
     @Override
+    @Transactional
     public Course_User updateCourse_User(Course_User course_user, Long id) {
         return course_userRepository.findById(id).map(cu -> {
             cu.setCourse(course_user.getCourse());
@@ -76,7 +80,13 @@ public class Course_UserServiceImpl implements Course_UserService {
     }
 
     @Override
+    @Transactional
     public void deleteCourse_User(Long id) {
         course_userRepository.deleteById(id);
+    }
+
+    @Override
+    public int totalCostOfCourse(Course course) {
+        return course_userRepository.totalCostOfCourse(course);
     }
 }

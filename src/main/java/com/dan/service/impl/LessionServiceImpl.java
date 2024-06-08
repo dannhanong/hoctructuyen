@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +36,7 @@ public class LessionServiceImpl implements LessionService {
     }
 
     @Override
+    @Transactional
     public Lession createLession(Course course, String name, String description, MultipartFile lessionVideo, MultipartFile lessionDocument) throws IOException {
         Lession lession = new Lession();
         lession.setName(name);
@@ -54,6 +56,7 @@ public class LessionServiceImpl implements LessionService {
     }
 
     @Override
+    @Transactional
     public Lession updateLession(Long id, Course course, String name, String description, MultipartFile lessionVideo, MultipartFile lessionDocument) throws IOException {
         return lessionRepository.findById(id).map(l -> {
             l.setCourse(course);
@@ -106,6 +109,7 @@ public class LessionServiceImpl implements LessionService {
     }
 
     @Override
+    @Transactional
     public void deleteLession(Long id) {
         lessionRepository.deleteById(id);
     }

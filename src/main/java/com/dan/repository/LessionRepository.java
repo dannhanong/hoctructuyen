@@ -11,4 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface LessionRepository extends JpaRepository<Lession, Long>{
     @Query("SELECT l FROM Lession l WHERE CONCAT(l.name, ' ', l.description) LIKE %:keyword%")
     Page<Lession> searchByKeyword(String keyword, Pageable pageable);
+//    @Query("SELECT l FROM Lession l WHERE l.publicDocument = true")
+//    Page<Lession> findPublic_Document(Pageable pageable);
+    Page<Lession> findByPublicDocument(boolean publicDocument, Pageable pageable);
 }

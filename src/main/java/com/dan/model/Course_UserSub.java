@@ -5,24 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Lession {
+public class Course_UserSub {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String description;
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
-    @OneToOne
-    @JoinColumn(name = "lession_video_id")
-    private FileUpload lessionVideo;
-    @OneToOne
-    @JoinColumn(name = "lession_document_id")
-    private FileUpload lessionDocument;
-    private boolean publicDocument;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    private Timestamp createdDate;
 }

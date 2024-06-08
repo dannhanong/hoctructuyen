@@ -4,11 +4,13 @@ import com.dan.config.Environment;
 import com.dan.exception.MoMoException;
 import com.dan.model.Course;
 import com.dan.model.Course_User;
+import com.dan.model.Course_UserSub;
 import com.dan.model.User;
 import com.dan.model.momo.PaymentResponse;
 import com.dan.model.momo.RequestType;
 import com.dan.repository.Course_UserRepository;
 import com.dan.service.Course_UserService;
+import com.dan.service.Course_UserSubService;
 import com.dan.service.UserService;
 import com.dan.util.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class Course_UserServiceImpl implements Course_UserService {
     private Course_UserRepository course_userRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private Course_UserSubService course_userSubService;
 //    @Autowired
 //    private CreateOrderMoMo createOrderMoMo;
 
@@ -60,12 +64,23 @@ public class Course_UserServiceImpl implements Course_UserService {
 
         String partnerClientId = "partnerClientId";
         String orderInfo = "Pay With MoMo";
-        String returnURL = "https://google.com.vn";
+        String returnURL = "http://localhost:8080/success";
         String notifyURL = "https://google.com.vn";
         Environment environment = Environment.selectEnv("dev");
-        PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.CAPTURE_WALLET, Boolean.TRUE);
+        PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId,
+                Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, Boolean.TRUE);
         Course_User newCourse_User = course_userRepository.save(course_user);
         return captureWalletMoMoResponse;
+    }
+
+    @Override
+    @Transactional
+    public Course_User createCourse_UserBySub(Course_UserSub course_userSub) {
+        Course_User course_user = new Course_User();
+        course_user.setCourse(course_userSub.getCourse());
+        course_user.setUser(course_userSub.getUser());
+        course_user.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+        return course_userRepository.save(course_user);
     }
 
     @Override

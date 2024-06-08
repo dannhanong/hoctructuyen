@@ -37,11 +37,13 @@ public class LessionServiceImpl implements LessionService {
 
     @Override
     @Transactional
-    public Lession createLession(Course course, String name, String description, MultipartFile lessionVideo, MultipartFile lessionDocument) throws IOException {
+    public Lession createLession(Course course, String name, String description, MultipartFile lessionVideo,
+                                 MultipartFile lessionDocument, boolean publicDocument) throws IOException {
         Lession lession = new Lession();
         lession.setName(name);
         lession.setDescription(description);
         lession.setCourse(course);
+        lession.setPublicDocument(publicDocument);
         if (lessionVideo != null && !lessionVideo.isEmpty()) {
             String fileLessionVideoName = StringUtils.cleanPath(lessionVideo.getOriginalFilename());
             FileUpload fileUploadLessionVideo = fileUploadService.uploadFile(fileLessionVideoName, lessionVideo);
@@ -57,11 +59,13 @@ public class LessionServiceImpl implements LessionService {
 
     @Override
     @Transactional
-    public Lession updateLession(Long id, Course course, String name, String description, MultipartFile lessionVideo, MultipartFile lessionDocument) throws IOException {
+    public Lession updateLession(Long id, Course course, String name, String description, MultipartFile lessionVideo,
+                                 MultipartFile lessionDocument, boolean publicDocument) throws IOException {
         return lessionRepository.findById(id).map(l -> {
             l.setCourse(course);
             l.setName(name);
             l.setDescription(description);
+            l.setPublicDocument(publicDocument);
             Long oldLessionVideoId = null;
             Long oldLessionDocumentId = null;
             if (lessionVideo != null && !lessionVideo.isEmpty()) {
@@ -95,6 +99,11 @@ public class LessionServiceImpl implements LessionService {
     @Override
     public Lession getLession(Long id) {
         return lessionRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found lession"));
+    }
+
+    @Override
+    public Page<Lession> getLessionsPublic(Pageable pageable) {
+        return lessionRepository.findByPublicDocument(true, pageable);
     }
 
     @Override

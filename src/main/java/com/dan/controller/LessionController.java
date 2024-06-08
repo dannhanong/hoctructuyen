@@ -32,27 +32,38 @@ public class LessionController {
     }
 
     @PostMapping("/admin/add")
-    public ResponseEntity<Lession> createLession(@RequestParam(value = "course") Course course,
-                                                 @RequestParam(value = "name") String name,
-                                                 @RequestParam(value = "description") String description,
-                                                 @RequestParam(value = "lessionVideo") MultipartFile lessionVideo,
-                                                 @RequestParam(value = "lessionDocument") MultipartFile lessionDocument) throws Exception {
-        return new ResponseEntity(lessionService.createLession(course, name, description, lessionVideo, lessionDocument), HttpStatus.CREATED);
+    public ResponseEntity<Lession> createLession(@RequestParam(value = "course", required = false) Course course,
+                                                 @RequestParam(value = "name", required = false) String name,
+                                                 @RequestParam(value = "description", required = false) String description,
+                                                 @RequestParam(value = "lessionVideo", required = false) MultipartFile lessionVideo,
+                                                 @RequestParam(value = "lessionDocument", required = false) MultipartFile lessionDocument,
+                                                 @RequestParam(value = "publicDocument") boolean publicDocument) throws Exception {
+        return new ResponseEntity(lessionService.createLession(course, name, description, lessionVideo, lessionDocument, publicDocument), HttpStatus.CREATED);
     }
 
     @PutMapping("/admin/update/{id}")
     public ResponseEntity<Lession> updateLession(@PathVariable(value = "id") Long id,
-                                                 @RequestParam(value = "course") Course course,
-                                                 @RequestParam(value = "name") String name,
-                                                 @RequestParam(value = "description") String description,
-                                                 @RequestParam(value = "lessionVideo") MultipartFile lessionVideo,
-                                                 @RequestParam(value = "lessionDocument") MultipartFile lessionDocument) throws Exception{
-        return new ResponseEntity(lessionService.updateLession(id, course, name, description, lessionVideo, lessionDocument), HttpStatus.OK);
+                                                 @RequestParam(value = "course", required = false) Course course,
+                                                 @RequestParam(value = "name", required = false) String name,
+                                                 @RequestParam(value = "description", required = false) String description,
+                                                 @RequestParam(value = "lessionVideo", required = false) MultipartFile lessionVideo,
+                                                 @RequestParam(value = "lessionDocument", required = false) MultipartFile lessionDocument,
+                                                 @RequestParam(value = "publicDocument") boolean publicDocument) throws Exception{
+        return new ResponseEntity(lessionService.updateLession(id, course, name, description, lessionVideo, lessionDocument, publicDocument), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<LessionDetail> getLessionDetail(@PathVariable(value = "id") Long id) {
         return new ResponseEntity(lessionService.getLessionDetail(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/public")
+    public ResponseEntity<Page<Lession>> getLessionsPublic(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                           @RequestParam(value = "size", defaultValue = "10") int size,
+                                                           @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+                                                           @RequestParam(value = "order", defaultValue = "desc") String order) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(sortBy)));
+        return new ResponseEntity(lessionService.getLessionsPublic(pageable), HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/delete/{id}")

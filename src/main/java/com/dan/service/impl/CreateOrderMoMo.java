@@ -38,7 +38,7 @@ public class CreateOrderMoMo extends AbstractProcess<PaymentRequest, PaymentResp
                 throw new MoMoException("[PaymentResponse] [" + request.getOrderId() + "] -> Error API");
             }
 
-            System.out.println("uweryei7rye8wyreow8: "+ response.getData());
+//            System.out.println("uweryei7rye8wyreow8: "+ response.getData());
 
             PaymentResponse captureMoMoResponse = getGson().fromJson(response.getData(), PaymentResponse.class);
             String responserawData = Parameter.REQUEST_ID + "=" + captureMoMoResponse.getRequestId() +
@@ -67,7 +67,7 @@ public class CreateOrderMoMo extends AbstractProcess<PaymentRequest, PaymentResp
      * @param extraData
      * @return
      */
-    public PaymentRequest createPaymentCreationRequest(String orderId, String requestId, String amount, String orderInfo,
+    public static PaymentRequest createPaymentCreationRequest(String orderId, String requestId, String amount, String orderInfo,
                                                        String returnUrl, String notifyUrl, String extraData, RequestType requestType, Boolean autoCapture) {
 
         try {

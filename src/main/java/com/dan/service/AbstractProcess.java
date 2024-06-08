@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public abstract class AbstractProcess<T, V> {
-    protected PartnerInfo partnerInfo;
+    protected static PartnerInfo partnerInfo;
     protected Environment environment;
     protected Execute execute = new Execute();
 

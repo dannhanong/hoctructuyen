@@ -7,6 +7,7 @@ import com.dan.model.Course_User;
 import com.dan.model.momo.PaymentResponse;
 import com.dan.model.momo.RequestType;
 import com.dan.service.Course_UserService;
+import com.dan.service.Course_UserSubService;
 import com.dan.service.JwtService;
 import com.dan.service.UserService;
 import com.dan.service.impl.CreateOrderMoMo;
@@ -26,6 +27,8 @@ public class Course_UserController {
     @Autowired
     private Course_UserService course_userService;
     @Autowired
+    private Course_UserSubService course_userSubService;
+    @Autowired
     private JwtService jwtService;
     @Autowired
     private UserService userService;
@@ -35,7 +38,7 @@ public class Course_UserController {
                                                              @RequestParam(value = "course") Course course) throws MoMoException {
         token = token.replace("Bearer ", "");
         String username = jwtService.extractUsername(token);
-        return new ResponseEntity<>(course_userService.createCourse_User(course, username), HttpStatus.CREATED);
+        return new ResponseEntity<>(course_userSubService.createCourse_User(course, username), HttpStatus.CREATED);
     }
 
     @PostMapping("/teacher/add")

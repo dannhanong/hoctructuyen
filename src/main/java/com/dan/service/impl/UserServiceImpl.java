@@ -10,6 +10,8 @@ import com.dan.repository.UserRepository;
 import com.dan.service.FileUploadService;
 import com.dan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -125,6 +127,16 @@ public class UserServiceImpl implements UserService {
             responseMessage.setMessage("change_password_fail");
         }
         return responseMessage;
+    }
+
+    @Override
+    public Page<User> getUserByKeyWord(String keyword, Pageable pageable) {
+        return userRepository.searchByKeyword(keyword, pageable);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
     @Override

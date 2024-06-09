@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -15,11 +16,13 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionRepository questionRepository;
 
     @Override
+    @Transactional
     public Question createQuestion(Question question) {
         return questionRepository.save(question);
     }
 
     @Override
+    @Transactional
     public Question updateQuestion(Question question, Long id) {
         return questionRepository.findById(id).map(question1 -> {
             question1.setContent(question.getContent());
@@ -29,6 +32,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    @Transactional
     public void deleteQuestion(Long id) {
         questionRepository.deleteById(id);
     }

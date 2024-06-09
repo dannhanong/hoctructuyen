@@ -1,21 +1,24 @@
 package com.dan.config;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
+import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
 
+@Configuration
 @Data
-public class Environment {
+@NoArgsConstructor
+public class CustomEnvironment {
     private PartnerInfo partnerInfo;
     private MoMoEndpoint endpoints;
     private String target;
 
-    public Environment(MoMoEndpoint endpoints, PartnerInfo partnerInfo, EnvTarget target) {
+    public CustomEnvironment(MoMoEndpoint endpoints, PartnerInfo partnerInfo, EnvTarget target) {
         this(endpoints, partnerInfo, target.string());
     }
 
-    public Environment(MoMoEndpoint momoEndpoint, PartnerInfo partnerInfo, String target) {
+    public CustomEnvironment(MoMoEndpoint momoEndpoint, PartnerInfo partnerInfo, String target) {
         this.endpoints = momoEndpoint;
         this.partnerInfo = partnerInfo;
         this.target = target;
@@ -27,24 +30,24 @@ public class Environment {
      * @return
      * @throws IllegalArgumentException
      */
-    public static Environment selectEnv(String target) throws IllegalArgumentException {
+    public static CustomEnvironment selectEnv(String target) throws IllegalArgumentException {
         return selectEnv(EnvTarget.DEV);
     }
 
     /*
-     * Select appropriate environment to run processes
-     * Create and modify your environment.properties file appropriately
+     * Select appropriate Customenvironment to run processes
+     * Create and modify your Customenvironment.properties file appropriately
      *
      * @param target EnvTarget (choose DEV or PROD)
      * @return
      */
-    public static Environment selectEnv(EnvTarget target) {
+    public static CustomEnvironment selectEnv(EnvTarget target) {
 
         switch (target) {
             case DEV:
                 MoMoEndpoint devEndpoint = new MoMoEndpoint("https://test-payment.momo.vn/v2/gateway/api", "/create");
                 PartnerInfo devInfo = new PartnerInfo("MOMOLRJZ20181206", "mTCKt9W3eU1m39TW", "SetA5RDnLHvt51AULf51DyauxUo3kDU6");
-                Environment devEn = new Environment(devEndpoint, devInfo, target);
+                CustomEnvironment devEn = new CustomEnvironment(devEndpoint, devInfo, target);
 
                 return devEn;
 

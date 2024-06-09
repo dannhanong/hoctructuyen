@@ -1,6 +1,6 @@
 package com.dan.service.impl;
 
-import com.dan.config.Environment;
+import com.dan.config.CustomEnvironment;
 import com.dan.exception.MoMoException;
 import com.dan.model.Course;
 import com.dan.model.Course_User;
@@ -25,6 +25,8 @@ public class Course_UserSubServiceImpl implements Course_UserSubService {
     private Course_UserSubRepository course_UserSubRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CreateOrderMoMo createOrderMoMo;
 
     @Override
     public Course_UserSub createCourse_UserSub(Course_UserSub course_UserSub) {
@@ -50,8 +52,8 @@ public class Course_UserSubServiceImpl implements Course_UserSubService {
         String orderInfo = newCourse_User.getId().toString();
         String returnURL = "http://localhost:8080/success";
         String notifyURL = "https://google.com.vn";
-        Environment environment = Environment.selectEnv("dev");
-        PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId,
+        CustomEnvironment environment = CustomEnvironment.selectEnv("dev");
+        PaymentResponse captureWalletMoMoResponse = createOrderMoMo.process(environment, orderId, requestId,
                 Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, Boolean.TRUE);
         return captureWalletMoMoResponse;
     }

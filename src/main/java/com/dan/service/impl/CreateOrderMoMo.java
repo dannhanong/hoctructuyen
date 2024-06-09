@@ -1,18 +1,20 @@
 package com.dan.service.impl;
 
-import com.dan.config.Environment;
+import com.dan.config.CustomEnvironment;
 import com.dan.constant.Parameter;
 import com.dan.exception.MoMoException;
 import com.dan.model.momo.*;
 import com.dan.service.AbstractProcess;
 import com.dan.util.Encoder;
 import com.dan.util.LogUtils;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CreateOrderMoMo extends AbstractProcess<PaymentRequest, PaymentResponse> {
-    public CreateOrderMoMo(Environment environment) {
+    public CreateOrderMoMo(CustomEnvironment environment) {
         super(environment);
     }
-    public static PaymentResponse process(Environment env, String orderId, String requestId, String amount, String orderInfo, String returnURL, String notifyURL, String extraData, RequestType requestType, Boolean autoCapture) throws MoMoException  {
+    public PaymentResponse process(CustomEnvironment env, String orderId, String requestId, String amount, String orderInfo, String returnURL, String notifyURL, String extraData, RequestType requestType, Boolean autoCapture) throws MoMoException  {
         try {
             CreateOrderMoMo m2Processor = new CreateOrderMoMo(env);
 

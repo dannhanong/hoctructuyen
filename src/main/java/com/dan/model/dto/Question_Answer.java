@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Question_Answer {
-    private String QuestionContent;
+    private String questionContent;
     List<Answer> answers;
 }

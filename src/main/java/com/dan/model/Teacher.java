@@ -21,7 +21,7 @@ public class Teacher {
     @JoinColumn(name = "discipline_id", referencedColumnName = "id")
     private Discipline discipline;
     private String level;
-    
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;

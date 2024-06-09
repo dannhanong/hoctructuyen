@@ -1,13 +1,13 @@
 package com.dan.controller;
 
+import com.dan.exception.MoMoException;
 import com.dan.model.Category;
 import com.dan.model.Course;
 import com.dan.model.FileUpload;
 import com.dan.model.dto.CourseDetailAndSuggest;
 import com.dan.model.dto.ResponseMessage;
-import com.dan.service.CategoryService;
-import com.dan.service.CourseService;
-import com.dan.service.FileUploadService;
+import com.dan.model.momo.PaymentResponse;
+import com.dan.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +30,10 @@ public class CourseController {
     private FileUploadService fileUploadService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private JwtService jwtService;
+    @Autowired
+    private Course_UserSubService course_userSubService;
 
     @GetMapping("")
     public ResponseEntity<Page<Course>> getAllCourses(@RequestParam(value = "keyword", defaultValue = "") String keyword,
@@ -81,6 +85,15 @@ public class CourseController {
     @GetMapping("/{id}")
     public ResponseEntity<CourseDetailAndSuggest> showCourseDetail(@PathVariable("id") Long id) {
         return new ResponseEntity<>(courseService.getCourseDetailAndSuggest(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<PaymentResponse> createCourse_User(@RequestHeader("Authorization") String token,
+                                                             @PathVariable("id") Long id) throws MoMoException {
+        token = token.replace("Bearer ", "");
+        String username = jwtService.extractUsername(token);
+        Course course = courseService.getCourseById(id);
+        return new ResponseEntity<>(course_userSubService.createCourse_User(course, username), HttpStatus.CREATED);
     }
 
     @GetMapping("/course/by-category/{id}")

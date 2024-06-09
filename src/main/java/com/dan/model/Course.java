@@ -26,8 +26,9 @@ public class Course {
     @JoinColumn(name = "course_video_id")
     private FileUpload courseVideo;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String result;
+    @Column(columnDefinition = "TEXT")
     private String object;
 
     @ManyToOne

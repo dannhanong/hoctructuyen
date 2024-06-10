@@ -1,6 +1,7 @@
 package com.dan.service.impl;
 
 import com.dan.model.*;
+import com.dan.model.dto.Comment_PComment;
 import com.dan.model.dto.CourseDetailAndSuggest;
 import com.dan.repository.CourseRepository;
 import com.dan.service.CommentService;
@@ -8,16 +9,14 @@ import com.dan.service.CourseService;
 import com.dan.service.FileUploadService;
 import com.dan.service.LessionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,12 +56,23 @@ public class CourseServiceImpl implements CourseService {
         Pageable pageable = PageRequest.of(0, 4);
         List<Course> suggestCourses = courseRepository.findByCategoryOrTeacherAndIdNot(course.getCategory(), course.getTeacher(), PageRequest.of(0, 5), id);
         Pageable paginate = PageRequest.of(0, 5, Sort.by(Sort.Order.desc("id")));
-        Page<Comment> comments = commentService.getCommentByCourse(course, pageable);
+
         List<Lession> lessions = lessionService.getLessionsByCourse(course);
         CourseDetailAndSuggest courseDetailAndSuggest = new CourseDetailAndSuggest();
         courseDetailAndSuggest.setCourse(course);
         courseDetailAndSuggest.setSuggestions(suggestCourses);
-        courseDetailAndSuggest.setComments(comments);
+
+        List<Comment> comments = commentService.getCommentByCourse(course);
+        List<Comment_PComment> comment_pComments = new ArrayList<>();
+        for (Comment comment : comments) {
+            Comment_PComment comment_pComment = new Comment_PComment();
+            comment_pComment.setParentComment(comment);
+            List<Comment> childComments = commentService.getCommentParentComment(comment);
+            comment_pComment.setChildComments(childComments);
+            comment_pComments.add(comment_pComment);
+        }
+        courseDetailAndSuggest.setCommentPComments(comment_pComments);
+
         courseDetailAndSuggest.setLessions(lessions);
         return courseDetailAndSuggest;
     }

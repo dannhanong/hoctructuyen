@@ -25,4 +25,9 @@ public class CommentController {
         String username = jwtService.extractUsername(token);
         return new ResponseEntity(commentService.createComment(commentDto, username), HttpStatus.CREATED);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CommentDto> getComment(@PathVariable Long id) {
+        return new ResponseEntity(commentService.getCommentParentComment(commentService.getComment(id)), HttpStatus.OK);
+    }
 }

@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CommentServiceImpl implements CommentService {
     @Autowired
@@ -70,17 +72,22 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Page<Comment> getCommentByCourse(Course course, Pageable pageable) {
-        return commentRepository.findByCourse(course, pageable);
+    public List<Comment> getCommentByCourse(Course course) {
+        return commentRepository.findByCourse(course);
     }
 
     @Override
-    public Page<Comment> getCommentLession(Lession lession, Pageable pageable) {
-        return commentRepository.findByLession(lession, pageable);
+    public List<Comment> getCommentLession(Lession lession) {
+        return commentRepository.findByLession(lession);
     }
 
     @Override
-    public Page<Comment> getCommentParentComment(Comment parentComment, Pageable pageable) {
-        return commentRepository.findByParentComment(parentComment, pageable);
+    public List<Comment> getCommentParentComment(Comment parentComment) {
+        return commentRepository.findByParentComment(parentComment);
+    }
+
+    @Override
+    public Comment getComment(Long id) {
+        return commentRepository.findById(id).orElseThrow(() -> new RuntimeException("Comment not found"));
     }
 }

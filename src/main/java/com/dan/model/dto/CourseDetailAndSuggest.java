@@ -16,6 +16,6 @@ import java.util.List;
 public class CourseDetailAndSuggest {
     private Course course;
     private List<Course> suggestions;
-    private Page<Comment> comments;
+    private List<Comment_PComment> commentPComments;
     private List<Lession> lessions;
 }

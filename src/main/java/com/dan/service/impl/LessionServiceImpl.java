@@ -111,7 +111,7 @@ public class LessionServiceImpl implements LessionService {
     public LessionDetail getLessionDetail(Long id) {
         Lession lession = lessionRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found lession"));
         Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Order.desc("id")));
-        Page<Comment> comments = commentService.getCommentLession(lession, pageable);
+        List<Comment> comments = commentService.getCommentLession(lession);
         LessionDetail lessionDetail = new LessionDetail();
         lessionDetail.setLession(lession);
         lessionDetail.setComments(comments);

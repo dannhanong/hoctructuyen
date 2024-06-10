@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface LessionService {
     public Page<Lession> getAllLessions(String keyword, Pageable pageable);
     public Lession createLession(Course course, String name, String description, MultipartFile lessionVideo, MultipartFile lessionDocument, boolean publicDocument) throws Exception;
@@ -15,4 +17,5 @@ public interface LessionService {
     public Page<Lession> getLessionsPublic(Pageable pageable);
     public LessionDetail getLessionDetail(Long id);
     public void deleteLession(Long id);
+    public List<Lession> getLessionsByCourse(Course course);
 }

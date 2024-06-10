@@ -6,6 +6,7 @@ import com.dan.repository.CourseRepository;
 import com.dan.service.CommentService;
 import com.dan.service.CourseService;
 import com.dan.service.FileUploadService;
+import com.dan.service.LessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,8 @@ public class CourseServiceImpl implements CourseService {
     private FileUploadService fileUploadService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private LessionService lessionService;
 
     @Override
     public Page<Course> getAllCourses(String keyword, Pageable pageable) {
@@ -55,10 +58,12 @@ public class CourseServiceImpl implements CourseService {
         List<Course> suggestCourses = courseRepository.findByCategoryOrTeacherAndIdNot(course.getCategory(), course.getTeacher(), PageRequest.of(0, 5), id);
         Pageable paginate = PageRequest.of(0, 5, Sort.by(Sort.Order.desc("id")));
         Page<Comment> comments = commentService.getCommentByCourse(course, pageable);
+        List<Lession> lessions = lessionService.getLessionsByCourse(course);
         CourseDetailAndSuggest courseDetailAndSuggest = new CourseDetailAndSuggest();
         courseDetailAndSuggest.setCourse(course);
         courseDetailAndSuggest.setSuggestions(suggestCourses);
         courseDetailAndSuggest.setComments(comments);
+        courseDetailAndSuggest.setLessions(lessions);
         return courseDetailAndSuggest;
     }
 

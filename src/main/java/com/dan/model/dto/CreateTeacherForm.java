@@ -20,6 +20,6 @@ public class CreateTeacherForm {
 
     private String cccd;
     private boolean sex;
-    private Discipline discipline;
+    private String discipline;
     private String level;
 }

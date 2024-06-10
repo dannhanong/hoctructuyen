@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class LessionServiceImpl implements LessionService {
@@ -121,5 +122,10 @@ public class LessionServiceImpl implements LessionService {
     @Transactional
     public void deleteLession(Long id) {
         lessionRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Lession> getLessionsByCourse(Course course) {
+        return lessionRepository.findByCourse(course);
     }
 }

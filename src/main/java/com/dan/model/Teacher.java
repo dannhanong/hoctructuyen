@@ -17,12 +17,20 @@ public class Teacher {
     @Pattern(regexp = "\\d{12}", message = "CCCD phải bao gồm 12 chữ số")
     private String cccd;
     private boolean sex;
-    @ManyToOne
-    @JoinColumn(name = "discipline_id", referencedColumnName = "id")
-    private Discipline discipline;
+    private String discipline;
     private String level;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private FileUpload image;
+    @Column(columnDefinition = "TEXT")
+    private String story;
+    @Column(columnDefinition = "TEXT")
+    private String achievements;
+    @Column(columnDefinition = "TEXT")
+    private String styleTeaching;
 }

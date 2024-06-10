@@ -1,22 +1,22 @@
 package com.dan.service.impl;
 
-import com.dan.model.Course;
-import com.dan.model.Report;
-import com.dan.model.Teacher;
-import com.dan.model.User;
+import com.dan.model.*;
 import com.dan.model.dto.Course_Amount;
 import com.dan.model.dto.CreateTeacherForm;
+import com.dan.model.dto.Teacher_User;
 import com.dan.repository.TeacherRepository;
-import com.dan.service.CourseService;
-import com.dan.service.Course_UserService;
-import com.dan.service.TeacherService;
-import com.dan.service.UserService;
+import com.dan.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +30,10 @@ public class TeacherServiceImpl implements TeacherService {
     private CourseService courseService;
     @Autowired
     private Course_UserService course_userService;
+    @Autowired
+    private FileUploadService fileUploadService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Teacher createTeacher(Teacher teacher) {
@@ -43,7 +47,7 @@ public class TeacherServiceImpl implements TeacherService {
         Teacher teacher = new Teacher();
         user.setName(createTeacherForm.getName());
         user.setUsername(createTeacherForm.getUsername());
-        user.setPassword(createTeacherForm.getPassword());
+        user.setPassword(passwordEncoder.encode(createTeacherForm.getPassword()));
         user.setEmail(createTeacherForm.getEmail());
         user.setPhoneNumber(createTeacherForm.getPhoneNumber());
 
@@ -52,6 +56,35 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setSex(createTeacherForm.isSex());
         teacher.setDiscipline(createTeacherForm.getDiscipline());
         teacher.setLevel(createTeacherForm.getLevel());
+        return teacherRepository.save(teacher);
+    }
+
+    @Override
+    @Transactional
+    public Teacher createTeacher(String name, String username, String password, String email, Date dob,
+                                 String phoneNumber, String cccd, boolean sex, String discipline, String level, MultipartFile file, String story, String achievements, String styleTeaching) throws IOException {
+        Teacher teacher = new Teacher();
+        User user = new User();
+        user.setName(name);
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setEmail(email);
+        user.setDob(dob);
+        user.setPhoneNumber(phoneNumber);
+        User newUser = userService.createUser(user);
+        teacher.setUser(newUser);
+        teacher.setCccd(cccd);
+        teacher.setSex(sex);
+        teacher.setDiscipline(discipline);
+        teacher.setLevel(level);
+        teacher.setStory(story);
+        teacher.setAchievements(achievements);
+        teacher.setStyleTeaching(styleTeaching);
+        if (file != null && !file.isEmpty()){
+            String imageName = StringUtils.cleanPath(file.getOriginalFilename());
+            FileUpload fileUploadTeacherImage = fileUploadService.uploadFile(imageName, file);
+            teacher.setImage(fileUploadTeacherImage);
+        }
         return teacherRepository.save(teacher);
     }
 
@@ -100,8 +133,59 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    public Teacher updateTeacher(String name, Date dob, String phoneNumber, String cccd, boolean sex, String discipline, String level,
+                                 MultipartFile file, String story, String achievements, String styleTeaching, Long id) throws IOException {
+        Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found teacher"));
+        User user = teacher.getUser();
+        user.setName(name);
+        user.setDob(dob);
+        user.setPhoneNumber(phoneNumber);
+        User updateUser = userService.updateUser(user, user.getId());
+        teacher.setCccd(cccd);
+        teacher.setDiscipline(discipline);
+        teacher.setLevel(level);
+        teacher.setStory(story);
+        teacher.setAchievements(achievements);
+        teacher.setStyleTeaching(styleTeaching);
+        Long oldImageId = null;
+
+        if (file != null && !file.isEmpty()) {
+            if (teacher.getImage() != null && !teacher.getImage().equals("")){
+                oldImageId = teacher.getImage().getId();
+            }
+            String fileTeacherImageName = StringUtils.cleanPath(file.getOriginalFilename());
+            FileUpload fileUploadTeacherImage = null;
+            try {
+                fileUploadTeacherImage = fileUploadService.uploadFile(fileTeacherImageName, file);
+                teacher.setImage(fileUploadTeacherImage);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        Teacher updateTeacher = teacherRepository.save(teacher);
+        if (oldImageId != null){
+            try {
+                fileUploadService.deleteFile(oldImageId);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return updateTeacher;
+    }
+
+    @Override
     public Teacher getTeacherByUser(User user) {
         return teacherRepository.findByUser(user);
+    }
+
+    @Override
+    public Teacher_User getTeacherUser(Long id) {
+        Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found teacher"));
+        User user = teacher.getUser();
+        Teacher_User teacher_user = new Teacher_User();
+        teacher_user.setTeacher(teacher);
+        teacher_user.setUser(user);
+        return teacher_user;
     }
 
     @Override

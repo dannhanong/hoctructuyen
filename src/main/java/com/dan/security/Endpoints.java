@@ -18,10 +18,30 @@ public class Endpoints {
             "/comments/**",
     };
 
-    public static final String[] PUBLIC_TEACHER_GET_ENDPOINTSS = {
+    public static final String[] PUBLIC_DELETE_ENDPOINTS = {
+    };
+
+    public static final String[] TEACHER_GET_ENDPOINTS = {
             "/report/**",
     };
 
-    public static final String[] PUBLIC_DELETE_ENDPOINTSS = {
+    public static final String[] ADMIN_GET_ENDPOINTS = {
+            "/admin/**",
+            "/teacher/**"
+    };
+
+    public static final String[] ADMIN_POST_ENDPOINTS = {
+            "/admin/**",
+            "/teacher/**"
+    };
+
+    public static final String[] ADMIN_PUT_ENDPOINTS = {
+            "/admin/**",
+            "/teacher/**"
+    };
+
+    public static final String[] ADMIN_DELETE_ENDPOINTS = {
+            "/admin/**",
+            "/teacher/**"
     };
 }

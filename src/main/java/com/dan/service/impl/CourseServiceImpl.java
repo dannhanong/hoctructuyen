@@ -60,6 +60,7 @@ public class CourseServiceImpl implements CourseService {
         List<Lession> lessions = lessionService.getLessionsByCourse(course);
         CourseDetailAndSuggest courseDetailAndSuggest = new CourseDetailAndSuggest();
         courseDetailAndSuggest.setCourse(course);
+        courseDetailAndSuggest.setTeacher(course.getTeacher());
         courseDetailAndSuggest.setSuggestions(suggestCourses);
 
         List<Comment> comments = commentService.getCommentByCourse(course);

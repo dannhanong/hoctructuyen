@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User updateUser(String name, Date dob, String phoneNumber,
-                           String cccd, MultipartFile avatar, String username) {
+                           MultipartFile avatar, String username) {
         User currentUser = userRepository.findByUsername(username);
         currentUser.setName(name);
         currentUser.setDob(dob);

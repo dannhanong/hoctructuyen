@@ -16,7 +16,7 @@ public interface UserService extends UserDetailsService {
     public boolean existsByUsername(String username);
     public boolean existsByEmail(String email);
     public User updateUser(User user, Long id);
-    public User updateUser(String name, Date dob, String phoneNumber, String cccd,
+    public User updateUser(String name, Date dob, String phoneNumber,
                            MultipartFile file, String username);
     public ResponseMessage changePassword(String username, ChangePasswordForm changePasswordForm);
     public Page<User> getUserByKeyWord(String keyword, Pageable pageable);

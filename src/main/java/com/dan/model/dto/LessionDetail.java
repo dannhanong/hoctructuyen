@@ -14,5 +14,5 @@ import java.util.List;
 @AllArgsConstructor
 public class LessionDetail {
     Lession lession;
-    List<Comment> comments;
+    List<Comment_PComment> commentPComments;
 }

@@ -34,10 +34,9 @@ public class ProfileController {
                                               @RequestParam(value = "name") String name,
                                               @RequestParam(value = "dob") Date dob,
                                               @RequestParam(value = "phoneNumber") String phoneNumber,
-                                              @RequestParam(value = "cccd") String cccd,
                                               @RequestParam(value = "avatar", required = false) MultipartFile avatar) {
         String username = getCustomer(token).getBody().getUsername();
-        return new ResponseEntity(userService.updateUser(name, dob, phoneNumber, cccd, avatar, username), HttpStatus.OK);
+        return new ResponseEntity(userService.updateUser(name, dob, phoneNumber, avatar, username), HttpStatus.OK);
     }
 
     @PutMapping("/change-password")

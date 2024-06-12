@@ -40,8 +40,6 @@ public class Course_UserController {
         return new ResponseEntity<>(course_userSubService.createCourse_User(course, username), HttpStatus.CREATED);
     }
 
-    @PostMapping("/teacher/add")
-
     @GetMapping("/my-courses")
     public ResponseEntity<Page<Course_User>> getAllCourseByUser(@RequestHeader("Authorization") String token,
                                                                 @RequestParam(value = "page", defaultValue = "0") int page,

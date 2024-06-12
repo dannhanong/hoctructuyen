@@ -4,6 +4,7 @@ import com.dan.model.Comment;
 import com.dan.model.Course;
 import com.dan.model.FileUpload;
 import com.dan.model.Lession;
+import com.dan.model.dto.Comment_PComment;
 import com.dan.model.dto.LessionDetail;
 import com.dan.repository.LessionRepository;
 import com.dan.service.CommentService;
@@ -20,6 +21,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -110,11 +112,19 @@ public class LessionServiceImpl implements LessionService {
     @Override
     public LessionDetail getLessionDetail(Long id) {
         Lession lession = lessionRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found lession"));
-        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Order.desc("id")));
-        List<Comment> comments = commentService.getCommentLession(lession);
+        List<Comment> pComments = commentService.getCommentLession(lession);
+        List<Comment_PComment> comment_pComments = new ArrayList<>();
+        for (Comment pComment : pComments) {
+            Comment_PComment comment_pComment = new Comment_PComment();
+            comment_pComment.setParentComment(pComment);
+            List<Comment> childComments = commentService.getCommentParentComment(pComment);
+            comment_pComment.setChildComments(childComments);
+            comment_pComments.add(comment_pComment);
+        }
+
         LessionDetail lessionDetail = new LessionDetail();
         lessionDetail.setLession(lession);
-        lessionDetail.setComments(comments);
+        lessionDetail.setCommentPComments(comment_pComments);
         return lessionDetail;
     }
 

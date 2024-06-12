@@ -10,7 +10,7 @@ import com.dan.security.jwt.JwtResponse;
 import com.dan.service.JwtService;
 import com.dan.service.RoleService;
 import com.dan.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 

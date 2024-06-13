@@ -1,6 +1,9 @@
 package com.dan.model.momo;
 
-public class PaymentRequest extends Request{
+import lombok.Data;
+
+@Data
+public class PaymentRequest extends Request {
     private String orderInfo;
     private long amount;
     private String partnerName;
@@ -29,110 +32,6 @@ public class PaymentRequest extends Request{
         this.partnerClientId = partnerClientId;
         this.autoCapture = autoCapture;
         this.orderGroupId = orderGroupId;
-        this.signature = signature;
-    }
-
-    public String getOrderInfo() {
-        return orderInfo;
-    }
-
-    public void setOrderInfo(String orderInfo) {
-        this.orderInfo = orderInfo;
-    }
-
-    public long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(long amount) {
-        this.amount = amount;
-    }
-
-    public String getPartnerName() {
-        return partnerName;
-    }
-
-    public void setPartnerName(String partnerName) {
-        this.partnerName = partnerName;
-    }
-
-    public String getSubPartnerCode() {
-        return subPartnerCode;
-    }
-
-    public void setSubPartnerCode(String subPartnerCode) {
-        this.subPartnerCode = subPartnerCode;
-    }
-
-    public String getRequestType() {
-        return requestType.getRequestType();
-    }
-
-    public void setRequestType(RequestType requestType) {
-        this.requestType = requestType;
-    }
-
-    public String getRedirectUrl() {
-        return redirectUrl;
-    }
-
-    public void setRedirectUrl(String redirectUrl) {
-        this.redirectUrl = redirectUrl;
-    }
-
-    public String getIpnUrl() {
-        return ipnUrl;
-    }
-
-    public void setIpnUrl(String ipnUrl) {
-        this.ipnUrl = ipnUrl;
-    }
-
-    public String getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
-    }
-
-    public String getExtraData() {
-        return extraData;
-    }
-
-    public void setExtraData(String extraData) {
-        this.extraData = extraData;
-    }
-
-    public String getPartnerClientId() {
-        return partnerClientId;
-    }
-
-    public void setPartnerClientId(String partnerClientId) {
-        this.partnerClientId = partnerClientId;
-    }
-
-    public Boolean getAutoCapture() {
-        return autoCapture;
-    }
-
-    public void setAutoCapture(Boolean autoCapture) {
-        this.autoCapture = autoCapture;
-    }
-
-    public Long getOrderGroupId() {
-        return orderGroupId;
-    }
-
-    public void setOrderGroupId(Long orderGroupId) {
-        this.orderGroupId = orderGroupId;
-    }
-
-    public String getSignature() {
-        return signature;
-    }
-
-    public void setSignature(String signature) {
         this.signature = signature;
     }
 }

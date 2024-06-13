@@ -42,6 +42,7 @@ public class Course_UserController {
 
     @GetMapping("/my-courses")
     public ResponseEntity<Page<Course_User>> getAllCourseByUser(@RequestHeader("Authorization") String token,
+                                                                @RequestParam(value = "name", defaultValue = "") String name,
                                                                 @RequestParam(value = "page", defaultValue = "0") int page,
                                                                @RequestParam(value = "size", defaultValue = "10") int size,
                                                                 @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
@@ -49,6 +50,6 @@ public class Course_UserController {
         token = token.replace("Bearer ", "");
         String username = jwtService.extractUsername(token);
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(sortBy)));
-        return new ResponseEntity<>(course_userService.getAllCourseByUser(userService.getUserByUsername(username), pageable), HttpStatus.OK);
+        return new ResponseEntity<>(course_userService.getAllCourseByUser(userService.getUserByUsername(username), name, pageable), HttpStatus.OK);
     }
 }

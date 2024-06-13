@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface Course_UserRepository extends JpaRepository<Course_User, Long>{
-    Page<Course_User> findByUser(User user, Pageable pageable);
+    @Query("SELECT c FROM Course_User c WHERE c.user = ?1 AND c.course.name LIKE %?2%")
+    Page<Course_User> findByUserAndNameContain(User user, String name, Pageable pageable);
     @Query("SELECT c FROM Course_User c WHERE CONCAT(c.course.name, ' ', c.user.name) LIKE %:keyword%" )
     Page<Course_User> findByKeyword(String keyword, Pageable pageable);
 

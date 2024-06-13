@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface Course_UserService {
-    Page<Course_User> getAllCourseByUser(User user, Pageable pageable);
+    Page<Course_User> getAllCourseByUser(User user, String name, Pageable pageable);
     Page<Course_User> getAllCourse_User(String keyword, Pageable pageable);
     public Course_User createCourse_User(Course_User course_user);
     public PaymentResponse createCourse_User(Course course, String username) throws MoMoException;

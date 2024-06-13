@@ -33,8 +33,8 @@ public class Course_UserServiceImpl implements Course_UserService {
     private CreateOrderMoMo createOrderMoMo;
 
     @Override
-    public Page<Course_User> getAllCourseByUser(User user, Pageable pageable) {
-        return course_userRepository.findByUser(user, pageable);
+    public Page<Course_User> getAllCourseByUser(User user, String name, Pageable pageable) {
+        return course_userRepository.findByUserAndNameContain(user, name, pageable);
     }
 
     @Override

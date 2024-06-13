@@ -37,7 +37,7 @@ public class HttpResponse {
         this.headers = headers;
     }
 
-    public String toString() {
-        return "HttpStatusCode:: " + this.status + ", ResponseBody:: " + this.data;
-    }
+//    public String toString() {
+//        return "HttpStatusCode:: " + this.status + ", ResponseBody:: " + this.data;
+//    }
 }

@@ -37,13 +37,14 @@ public class CourseController {
 
     @GetMapping("")
     public ResponseEntity<Page<Course>> getAllCourses(@RequestParam(value = "keyword", defaultValue = "") String keyword,
+                                                      @RequestParam(value = "category", defaultValue = "") String kCategory,
                                                       @RequestParam(value = "page", defaultValue = "0") int page,
                                                       @RequestParam(value = "size", defaultValue = "10") int size,
                                                       @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
                                                       @RequestParam(value = "order", defaultValue = "desc") String order)
     {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(sortBy)));
-        return new  ResponseEntity<>(courseService.getAllCourses(keyword, pageable), HttpStatus.OK);
+        return new  ResponseEntity<>(courseService.getAllCourses(keyword, pageable, kCategory), HttpStatus.OK);
     }
 
     @PostMapping("/admin/add")

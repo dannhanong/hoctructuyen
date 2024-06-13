@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CourseService {
-    public Page<Course> getAllCourses(String keyword, Pageable pageable);
+    public Page<Course> getAllCourses(String keyword, Pageable pageable, String kCategory);
     List<Course> getAllCourses();
     List<Course> getCourseByTeacher(Teacher teacher);
     public Course getCourseById(Long id);

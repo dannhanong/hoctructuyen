@@ -31,8 +31,8 @@ public class CourseServiceImpl implements CourseService {
     private LessionService lessionService;
 
     @Override
-    public Page<Course> getAllCourses(String keyword, Pageable pageable) {
-        return courseRepository.searchByKeyword(keyword, pageable);
+    public Page<Course> getAllCourses(String keyword, Pageable pageable, String kCategory) {
+        return courseRepository.searchByKeyword(keyword, pageable, kCategory);
     }
 
     @Override

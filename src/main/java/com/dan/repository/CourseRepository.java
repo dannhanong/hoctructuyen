@@ -13,8 +13,8 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
-    @Query("SELECT c FROM Course c WHERE CONCAT(c.name, ' ', c.object) LIKE %:keyword%" )
-    Page<Course> searchByKeyword(String keyword, Pageable pageable);
+    @Query("SELECT c FROM Course c WHERE CONCAT(c.name, ' ', c.object) LIKE %:keyword% OR c.category.name LIKE :kCategory" )
+    Page<Course> searchByKeyword(String keyword, Pageable pageable, String kCategory);
     Page<Course> findByCategory(Category category, Pageable pageable);
     List<Course> findByCategoryOrTeacherAndIdNot(Category category, Teacher teacher, Pageable pageable, Long id);
     @Query("SELECT SUM(c.cost) FROM Course c WHERE c.id = ?1")

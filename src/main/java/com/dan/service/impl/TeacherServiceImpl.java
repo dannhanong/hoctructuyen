@@ -209,14 +209,18 @@ public class TeacherServiceImpl implements TeacherService {
         report.setTeacher(teacher);
         List<Course> courses = courseService.getCourseByTeacher(teacher);
         List<Course_Amount> courseAmounts = new ArrayList<>();
+        List<Course_User> course_users = new ArrayList<>();
         for (Course course : courses) {
             int totalAmount = course_userService.totalCostOfCourse(course);
             Course_Amount course_amount = new Course_Amount();
             course_amount.setCourse(course);
             course_amount.setTotalAmount(totalAmount);
             courseAmounts.add(course_amount);
+            List<Course_User> course_users1 = course_userService.getCourse_UserByCourse(course);
+            course_users.addAll(course_users1);
         }
         report.setCourse_amounts(courseAmounts);
+        report.setTotalCourse(course_users.size());
         return report;
     }
 }

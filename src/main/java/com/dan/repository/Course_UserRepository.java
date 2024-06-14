@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface Course_UserRepository extends JpaRepository<Course_User, Long>{
     @Query("SELECT c FROM Course_User c WHERE c.user = ?1 AND c.course.name LIKE %?2%")
@@ -18,4 +20,6 @@ public interface Course_UserRepository extends JpaRepository<Course_User, Long>{
 
     @Query("SELECT SUM(c.course.cost) FROM Course_User c WHERE c.course = ?1")
     int totalCostOfCourse(Course course);
+
+    List<Course_User> findByCourse(Course course);
 }

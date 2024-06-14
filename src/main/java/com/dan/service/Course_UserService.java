@@ -9,6 +9,8 @@ import com.dan.model.momo.PaymentResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface Course_UserService {
     Page<Course_User> getAllCourseByUser(User user, String name, Pageable pageable);
     Page<Course_User> getAllCourse_User(String keyword, Pageable pageable);
@@ -18,4 +20,5 @@ public interface Course_UserService {
     public Course_User updateCourse_User(Course_User course_user, Long id);
     public void deleteCourse_User(Long id);
     public int totalCostOfCourse(Course course);
+    public List<Course_User> getCourse_UserByCourse(Course course);
 }

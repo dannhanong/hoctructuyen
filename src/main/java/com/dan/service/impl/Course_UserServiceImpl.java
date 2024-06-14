@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 public class Course_UserServiceImpl implements Course_UserService {
@@ -103,5 +104,10 @@ public class Course_UserServiceImpl implements Course_UserService {
     @Override
     public int totalCostOfCourse(Course course) {
         return course_userRepository.totalCostOfCourse(course);
+    }
+
+    @Override
+    public List<Course_User> getCourse_UserByCourse(Course course) {
+        return course_userRepository.findByCourse(course);
     }
 }

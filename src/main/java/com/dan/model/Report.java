@@ -13,4 +13,5 @@ import java.util.List;
 public class Report {
     private Teacher teacher;
     private List<Course_Amount> course_amounts;
+    private int totalCourse;
 }

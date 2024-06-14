@@ -1,6 +1,7 @@
 package com.dan.controller;
 
 import com.dan.model.Banner;
+import com.dan.model.dto.ResponseMessage;
 import com.dan.service.BannerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,9 +41,9 @@ public class BannerController {
     }
 
     @DeleteMapping("/admin/delete/{id}")
-    public ResponseEntity deleteBanner(@PathVariable Long id) {
+    public ResponseEntity<?> deleteBanner(@PathVariable Long id) {
         bannerService.deleteBanner(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(new ResponseMessage("deleted"), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

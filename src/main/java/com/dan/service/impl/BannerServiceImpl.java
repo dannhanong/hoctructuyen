@@ -7,6 +7,7 @@ import com.dan.service.BannerService;
 import com.dan.service.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -75,7 +76,7 @@ public class BannerServiceImpl implements BannerService {
     }
 
     @Override
-    public Page<Banner> getAllBanners() {
-        return null;
+    public Page<Banner> getAllBanners(Pageable pageable) {
+        return bannerRepository.findAll(pageable);
     }
 }

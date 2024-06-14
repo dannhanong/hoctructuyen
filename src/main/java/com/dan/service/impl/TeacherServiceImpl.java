@@ -18,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
@@ -34,6 +36,8 @@ public class TeacherServiceImpl implements TeacherService {
     private FileUploadService fileUploadService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public Teacher createTeacher(Teacher teacher) {
@@ -71,6 +75,12 @@ public class TeacherServiceImpl implements TeacherService {
         user.setEmail(email);
         user.setDob(dob);
         user.setPhoneNumber(phoneNumber);
+
+        Set<Role> roles = new HashSet<>();
+        Role teacherRole = roleService.findByName(RoleName.TEACHER).orElseThrow(() -> new RuntimeException("Role not found"));
+        roles.add(teacherRole);
+        user.setRoles(roles);
+
         User newUser = userService.createUser(user);
         teacher.setUser(newUser);
         teacher.setCccd(cccd);

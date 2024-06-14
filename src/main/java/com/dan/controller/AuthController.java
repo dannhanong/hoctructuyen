@@ -86,8 +86,12 @@ public class AuthController {
                 return new ResponseEntity<>(new JwtResponse(jwt), HttpStatus.OK);
             }
         }catch (AuthenticationException e){
-            return new ResponseEntity<>(new ResponseMessage("login_fail"), HttpStatus.BAD_REQUEST);
+            if (userService.getUserByUsername(loginForm.getUsername()) != null) {
+                return new ResponseEntity<>(new ResponseMessage("wrong_password"), HttpStatus.BAD_REQUEST);
+            }else {
+                return new ResponseEntity<>(new ResponseMessage("username_not_exists"), HttpStatus.BAD_REQUEST);
+            }
         }
-        return new ResponseEntity<>(new ResponseMessage("login_fail"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseMessage("An unknown error"), HttpStatus.BAD_REQUEST);
     }
 }

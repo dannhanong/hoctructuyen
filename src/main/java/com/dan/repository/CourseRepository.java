@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
-    @Query("SELECT c FROM Course c WHERE CONCAT(c.name, ' ', c.object) LIKE %:keyword% AND c.category.name LIKE :kCategory" )
+    @Query("SELECT c FROM Course c WHERE CONCAT(c.name, ' ', c.object) LIKE %:keyword% AND c.category.name LIKE %:kCategory%" )
     Page<Course> searchByKeyword(String keyword, Pageable pageable, String kCategory);
     Page<Course> findByCategory(Category category, Pageable pageable);
     List<Course> findByCategoryOrTeacherAndIdNot(Category category, Teacher teacher, Pageable pageable, Long id);

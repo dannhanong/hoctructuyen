@@ -30,7 +30,7 @@ public class BannerController {
     }
 
     @PostMapping("/admin/add")
-    public ResponseEntity<Banner> createBanner(@RequestParam(value = "image") MultipartFile image) throws IOException {
+    public ResponseEntity<Banner> createBanner(@RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
         return new ResponseEntity(bannerService.createBanner(image), HttpStatus.CREATED);
     }
 

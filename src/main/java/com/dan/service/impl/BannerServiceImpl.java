@@ -36,7 +36,7 @@ public class BannerServiceImpl implements BannerService {
             FileUpload fileUploadBannerImage = fileUploadService.uploadFile(fileBannerImageName, file);
             b.setImage(fileUploadBannerImage);
         }
-        return b;
+        return bannerRepository.save(b);
     }
 
     @Override

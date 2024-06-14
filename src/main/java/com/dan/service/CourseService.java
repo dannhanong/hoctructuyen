@@ -20,9 +20,9 @@ public interface CourseService {
     public CourseDetailAndSuggest getCourseDetailAndSuggest(Long id);
     public Course createCourse(Course course);
     public Course createCourse(String name, String description, int cost, MultipartFile courseImage,
-                             MultipartFile courseVideo, String result, String object, Category category) throws IOException;
+                             MultipartFile courseVideo, String result, String object, Category category, Teacher teacher) throws IOException;
     public void deleteCourse(Long id);
     public Course updateCourse(Long id, Course course);
     public Course updateCourse(String name, String description, int cost, MultipartFile courseImage,
-                               MultipartFile courseVideo, String result, String object, Category category, Long id) throws IOException;
+                               MultipartFile courseVideo, String result, String object, Category category, Teacher teacher, Long id) throws IOException;
     Page<Course> getCourseByCategory(Category category, Pageable pageable);}

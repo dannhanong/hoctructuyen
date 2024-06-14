@@ -85,13 +85,15 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public Course createCourse(String name, String description, int cost, MultipartFile courseImage, MultipartFile courseVideo, String result, String object, Category category) throws IOException {
+    public Course createCourse(String name, String description, int cost, MultipartFile courseImage, MultipartFile courseVideo,
+                               String result, String object, Category category, Teacher teacher) throws IOException {
         Course course = new Course();
         course.setName(name);
         course.setDescription(description);
         course.setCost(cost);
         course.setResult(result);
         course.setObject(object);
+        course.setTeacher(teacher);
         if (courseImage != null && !courseImage.isEmpty()) {
             String filecourseImageName = StringUtils.cleanPath(courseImage.getOriginalFilename());
             FileUpload fileUploadCourseImage = fileUploadService.uploadFile(filecourseImageName, courseImage);
@@ -148,7 +150,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public Course updateCourse(String name, String description, int cost, MultipartFile courseImage,
-                               MultipartFile courseVideo, String result, String object, Category category,
+                               MultipartFile courseVideo, String result, String object, Category category, Teacher teacher,
                                Long id) throws IOException {
         return courseRepository.findById(id)
                 .map(c -> {
@@ -157,6 +159,7 @@ public class CourseServiceImpl implements CourseService {
                     c.setCost(cost);
                     c.setResult(result);
                     c.setObject(object);
+                    c.setTeacher(teacher);
                     Long oldCourseImageId = null;
                     Long oldCourseVideoId = null;
                     if (courseImage != null && !courseImage.isEmpty()) {

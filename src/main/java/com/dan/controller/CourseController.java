@@ -4,6 +4,7 @@ import com.dan.exception.MoMoException;
 import com.dan.model.Category;
 import com.dan.model.Course;
 import com.dan.model.FileUpload;
+import com.dan.model.Teacher;
 import com.dan.model.dto.CourseDetailAndSuggest;
 import com.dan.model.dto.ResponseMessage;
 import com.dan.model.momo.PaymentResponse;
@@ -55,9 +56,10 @@ public class CourseController {
                                                @RequestParam(value = "courseVideo", required = false) MultipartFile courseVideo,
                                                @RequestParam(value = "result") String result,
                                                @RequestParam(value = "object") String object,
-                                               @RequestParam(value = "category") Category category) throws IOException {
+                                               @RequestParam(value = "category") Category category,
+                                               @RequestParam(value = "teacher")Teacher teacher) throws IOException {
 
-        return new ResponseEntity<>(courseService.createCourse(name, description, cost, courseImage, courseVideo, result, object, category), HttpStatus.CREATED);
+        return new ResponseEntity<>(courseService.createCourse(name, description, cost, courseImage, courseVideo, result, object, category, teacher), HttpStatus.CREATED);
     }
 
     @PutMapping("/admin/update/{id}")
@@ -69,8 +71,9 @@ public class CourseController {
                                                @RequestParam(value = "result") String result,
                                                @RequestParam(value = "object") String object,
                                                @RequestParam(value = "category") Category category,
+                                               @RequestParam(value = "teacher") Teacher teacher,
                                                @PathVariable("id") Long id) throws IOException {
-        return new ResponseEntity<>(courseService.updateCourse(name, description, cost, courseImage, courseVideo, result, object, category, id), HttpStatus.OK);
+        return new ResponseEntity<>(courseService.updateCourse(name, description, cost, courseImage, courseVideo, result, object, category, teacher, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/delete/{id}")

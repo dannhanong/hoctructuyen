@@ -85,7 +85,7 @@ public class CreateOrderMoMo extends AbstractProcess<PaymentRequest, PaymentResp
                     .append(Parameter.REQUEST_ID).append("=").append(requestId).append("&")
                     .append(Parameter.REQUEST_TYPE).append("=").append(requestType.getRequestType())
                     .toString();
-            System.out.println("chuỗi request siêu dep: " + requestRawData);
+//            System.out.println("chuỗi request siêu dep: " + requestRawData);
             String signRequest = Encoder.signHmacSHA256(requestRawData, partnerInfo.getSecretKey());
             LogUtils.debug("[PaymentRequest] rawData: " + requestRawData + ", [Signature] -> " + signRequest);
 

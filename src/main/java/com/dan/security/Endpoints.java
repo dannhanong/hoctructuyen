@@ -2,7 +2,7 @@ package com.dan.security;
 
 public class Endpoints {
     public static final String front_end_host = "http://localhost:3000";
-    public static final String[] PUBLIC_GET_ENDPOINTSS = {
+    public static final String[] PUBLIC_GET_ENDPOINTS = {
             "/courses/**",
             "/comments/**",
     };
@@ -13,7 +13,7 @@ public class Endpoints {
             "/comments/**",
     };
 
-    public static final String[] PUBLIC_PUT_ENDPOINTSS = {
+    public static final String[] PUBLIC_PUT_ENDPOINTS = {
             "/profile/**",
             "/comments/**",
     };

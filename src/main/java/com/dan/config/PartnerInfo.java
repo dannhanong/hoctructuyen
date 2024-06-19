@@ -2,6 +2,9 @@ package com.dan.config;
 
 import org.springframework.context.annotation.Configuration;
 
+import lombok.Data;
+
+@Data
 public class PartnerInfo {
     private String accessKey;
     private String partnerCode;
@@ -18,36 +21,5 @@ public class PartnerInfo {
         this.partnerCode = partnerCode;
         this.secretKey = secretKey;
         this.publicKey = publicKey;
-    }
-    public String getAccessKey() {
-        return accessKey;
-    }
-
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-    }
-
-    public String getPartnerCode() {
-        return partnerCode;
-    }
-
-    public void setPartnerCode(String partnerCode) {
-        this.partnerCode = partnerCode;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
-
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
-    }
-
-    public String getPublicKey() {
-        return publicKey;
     }
 }

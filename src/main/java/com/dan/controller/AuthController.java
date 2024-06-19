@@ -55,6 +55,10 @@ public class AuthController {
         User user = new User(signupForm.getName(), signupForm.getUsername(), passwordEncoder.encode(signupForm.getPassword()), signupForm.getEmail());
         Set<String> strRoles = signupForm.getRoles();
         Set<Role> roles = new HashSet<>();
+        if (strRoles == null){
+            Role studentRole = roleService.findByName(RoleName.STUDENT).orElseThrow(() -> new RuntimeException("Role not found"));
+            roles.add(studentRole);
+        }else {
             strRoles.forEach(role -> {
                 switch (role){
                     case "admin":
@@ -71,6 +75,7 @@ public class AuthController {
                         break;
                 }
             });
+        }
         user.setRoles(roles);
         userService.createUser(user);
         return new ResponseEntity<>(new ResponseMessage("create_success"), HttpStatus.OK);

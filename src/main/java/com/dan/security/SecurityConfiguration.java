@@ -42,8 +42,8 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(
                 config->config
                         .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINTSS).permitAll()
-                        .requestMatchers(HttpMethod.PUT, Endpoints.PUBLIC_PUT_ENDPOINTSS).permitAll()
+                        .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.PUT, Endpoints.PUBLIC_PUT_ENDPOINTS).permitAll()
                         .anyRequest().permitAll()
         );
         http.cors(cors -> {
